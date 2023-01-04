@@ -12,3 +12,4 @@ for directory in $directories; do
     echo " - $item"
   done
 done
+
