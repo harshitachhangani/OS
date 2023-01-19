@@ -1,3 +1,5 @@
+from tabulate import tabulate
+
 def preemptive_priority():
     n = int(input("Enter the number of jobs: "))
     jobs = []
@@ -12,7 +14,7 @@ def preemptive_priority():
     completion_time = 0
     waiting_time = 0
     turnaround_time = 0
-    print("Job ID\t\tBurst Time\t\tArrival Time\t\tCompletion Time\t\tWaiting Time\t\tTurnaround Time")
+    data = []
     while len(jobs) > 0:
         i = 0
         while i < len(jobs):
@@ -20,16 +22,18 @@ def preemptive_priority():
                 break
             i += 1
         if i == len(jobs):
-            completion_time
+            completion_time = jobs[i-1][2]
             break
         jobs[i], jobs[0] = jobs[0], jobs[i]  # bring the next job to be executed to the front of the list
         completion_time += jobs[0][1]
         waiting_time += (completion_time - jobs[0][1] - jobs[0][2])
         turnaround_time += (completion_time - jobs[0][2])
-        print(jobs[0][0], "\t\t", jobs[0][1], "\t\t\t", jobs[0][2], "\t\t\t", completion_time, "\t\t\t", completion_time - jobs[0][1] - jobs[0][2], "\t\t\t", completion_time - jobs[0][2])
+        data.append([jobs[0][0], jobs[0][1], jobs[0][2], jobs[0][3], completion_time, completion_time-jobs[0][1]-jobs[0][2], completion_time-jobs[0][2]])
         jobs.pop(0)
+    header = ["Job ID", "Burst Time","Arrival Time","Priority","Completion Time","Waiting Time", "Turnaround Time"]
+    print(tabulate(data, headers=header))
     print("Average waiting time: ", waiting_time/n)
     print("Average turnaround time: ", turnaround_time/n)
-
 preemptive_priority()
 
+       
