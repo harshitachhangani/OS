@@ -3,7 +3,7 @@ def findWaitingTime(processes, n, wt):
 	rt = [0] * n
 
 	# Copy the burst time into rt[]
-	for i in range(n):
+	for i in range(n):image.png
 		rt[i] = processes[i][1]
 	complete = 0
 	t = 0
