@@ -35,3 +35,18 @@ def FCFS():
   print(f"Average turnaround time: {avg_turnaround_t}")
 
 FCFS()
+
+# OUTPUT:
+# Enter the process name or number and 'finish' to exit: p1
+# Enter the time it takes to complete the process: 5
+# Enter the process name or number and 'finish' to exit: p2
+# Enter the time it takes to complete the process: 2
+# Enter the process name or number and 'finish' to exit: p3
+# Enter the time it takes to complete the process: 8
+# Enter the process name or number and 'finish' to exit: finish
+# Process Waiting Time    Turnaround Time
+# p1              0               5
+# p2              5               7
+# p3              7               15
+# Average waiting time: 4.0
+# Average turnaround time: 9.0
