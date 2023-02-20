@@ -33,9 +33,3 @@ faults = fifo(pages, n_frames)
 print("Number of Page Faults:", faults)
 
 
-pages = [7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2]
-n_frames = 3
-
-page_faults = fifo(pages, n_frames)
-
-print(f"Number of page faults: {page_faults}")
