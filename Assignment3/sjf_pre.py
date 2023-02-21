@@ -1,120 +1,63 @@
-def findWaitingTime(processes, n, wt):
+n = int(input("Enter the number of processes: "))
 
-	rt = [0] * n
+burst_time = []
+arrival_time = []
+for i in range(n):
+    arrival_time.append(int(input("Enter the arrival time of process {}: ".format(i+1))))
+    burst_time.append(int(input("Enter the burst time of process {}: ".format(i+1))))
 
-	# Copy the burst time into rt[]
-	for i in range(n):image.png
-		rt[i] = processes[i][1]
-	complete = 0
-	t = 0
-	minm = 999999999
-	short = 0
-	check = False
+processes = []
+for i in range(n):
+    processes.append([i+1, arrival_time[i], burst_time[i]])
 
-	# Process until all processes gets
-	# completed
-	while (complete != n):
-		
-		# Find process with minimum remaining
-		# time among the processes that
-		# arrives till the current time`
-		for j in range(n):
-			if ((processes[j][2] <= t) and
-				(rt[j] < minm) and rt[j] > 0):
-				minm = rt[j]
-				short = j
-				check = True
-		if (check == False):
-			t += 1
-			continue
-			
-		# Reduce remaining time by one
-		rt[short] -= 1
+processes = sorted(processes, key=lambda x: x[1])
 
-		# Update minimum
-		minm = rt[short]
-		if (minm == 0):
-			minm = 999999999
+total_time = 0
+for i in range(n):
+    total_time += processes[i][2]
 
-		# If a process gets completely
-		# executed
-		if (rt[short] == 0):
+completion_time = [0] * n
+remaining_time = [processes[i][2] for i in range(n)]
+current_time = 0
+queue = []
+t = 0
 
-			# Increment complete
-			complete += 1
-			check = False
+while True:
+    for i in range(n):
+        if remaining_time[i] > 0 and processes[i][1] <= current_time:
+            if i not in queue:
+                queue.append(i)
 
-			# Find finish time of current
-			# process
-			fint = t + 1
+    if not queue:
+        t += 1
+        current_time += 1
+        continue
 
-			# Calculate waiting time
-			wt[short] = (fint - proc[short][1] -	
-								proc[short][2])
+    next_process = min(queue, key=lambda x: remaining_time[x])
+    remaining_time[next_process] -= 1
 
-			if (wt[short] < 0):
-				wt[short] = 0
-		
-		# Increment time
-		t += 1
+    if remaining_time[next_process] == 0:
+        queue.remove(next_process)
+        completion_time[next_process] = current_time + 1
 
-# Function to calculate turn around time
-def findTurnAroundTime(processes, n, wt, tat):
-	
-	# Calculating turnaround time
-	for i in range(n):
-		tat[i] = processes[i][1] + wt[i]
+    t += 1
+    current_time += 1
 
-# Function to calculate average waiting
-# and turn-around times.
-def findavgTime(processes, n):
-	wt = [0] * n
-	tat = [0] * n
+    if t == total_time:
+        break
 
-	# Function to find waiting time
-	# of all processes
-	findWaitingTime(processes, n, wt)
+turnaround_time = [0] * n
+waiting_time = [0] * n
+for i in range(n):
+    turnaround_time[i] = completion_time[i] - processes[i][1]
+    waiting_time[i] = turnaround_time[i] - processes[i][2]
 
-	# Function to find turn around time
-	# for all processes
-	findTurnAroundTime(processes, n, wt, tat)
+print("Process\tArrival Time\tBurst Time\tCompletion Time\tTurnaround Time\tWaiting Time")
+for i in range(n):
+    print("{}\t\t{}\t\t{}\t\t{}\t\t{}\t\t{}".format(processes[i][0], processes[i][1], processes[i][2], completion_time[i], turnaround_time[i], waiting_time[i]))
 
-	# Display processes along with all details
-	print("Processes Burst Time	 Waiting",
-					"Time	 Turn-Around Time")
-	total_wt = 0
-	total_tat = 0
-	for i in range(n):
+average_turnaround_time = sum(turnaround_time) / n
+average_waiting_time = sum(waiting_time) / n
 
-		total_wt = total_wt + wt[i]
-		total_tat = total_tat + tat[i]
-		print(" ", processes[i][0], "\t\t",
-				processes[i][1], "\t\t",
-				wt[i], "\t\t", tat[i])
-
-	print("\nAverage waiting time = %.5f "%(total_wt /n) )
-	print("Average turn around time = ", total_tat / n)
-	
-# Driver code
-if __name__ =="__main__":
-	
-	# Process id's
-	# proc = [[1, 6, 1], [2, 8, 1],
-	# 		[3, 7, 2], [4, 3, 3]]
-	# n = 4
-
-    proc = []
-
-  # Prompt the user to enter the processes
-    while True:
-        name = input("Enter the name of the process (or enter 'done' to exit): ")
-        if name == "done":
-            break
-        time = int(input("Enter the time it takes to complete the process BT: "))
-        AT = int(input("Enter the time it takes to complete the process AT: "))
-        proc.append((name, time, AT))
-
-  # Get the number of processes
-    n = len(proc)    
-findavgTime(proc, n)
-	
+print("Average Turnaround Time: {:.2f}".format(average_turnaround_time))
+print("Average Waiting Time: {:.2f}".format(average_waiting_time))
